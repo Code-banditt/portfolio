@@ -3,17 +3,10 @@
 const experienceData = [
   {
     title: "Frontend Developer Intern",
-    company: "DummyTech Solutions",
-    period: "Jan 2023 – Aug 2023",
+    company: "Digital Dreams",
+    period: "Aug 2023 – Nov 2023",
     description:
       "Worked with React and Tailwind to build internal dashboards and improve UX.",
-  },
-  {
-    title: "Freelance Web Developer",
-    company: "Upwork & Fiverr",
-    period: "2022 – Present",
-    description:
-      "Built multiple websites for clients using Next.js, Supabase, and Framer Motion.",
   },
 ];
 
@@ -28,7 +21,7 @@ const educationData = [
   {
     degree: "Full Stack Development (Self-Taught)",
     school: "Online (Udemy, Docs)",
-    period: "2022 – Present",
+    period: "2023 – Present",
     description:
       "Focused on React, Next.js, Node.js, MongoDB, and modern backend patterns.",
   },
