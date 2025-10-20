@@ -6,23 +6,27 @@ import { useInView } from "react-intersection-observer";
 import Link from "next/link";
 import image1 from "/public/img/doggity.png"; // ✅ Assuming correct import
 import image2 from "/public/img/roadlux.png";
+import image3 from "/public/img/portfolioimage.png";
+import image4 from "/public/img/planora.png";
+import image5 from "/public/img/unis.png";
+import image6 from "/public/img/wanderlust.png";
 const beginnerProjects = [
   {
     title: "WOOF",
     description:
       "Simple HTML/CSS project with a little bit of javascript, my first project in my web dev journey.",
     image: image1,
-    live: "https://vercel.com/chanel-bandits-projects/dog-website/ERVDPCEiadU2nqpFdX4Lx9Xo8r9o",
+    live: "https://dog-website-plum.vercel.app",
     github: "https://github.com/Code-banditt/dog-website-.git",
     stacks: "HTML, Css, Js",
   },
   {
-    title: "HTML Portfolio",
-    description: "Static portfolio site built with HTML/CSS.",
-    image: "/placeholder2.jpg",
-    live: "#",
+    title: "Find Universities",
+    description: "Static Research site built with react and api integrations.",
+    image: image5,
+    live: "https://worlds-universities.vercel.app/",
     github: "#",
-    stacks: "HTML,Css,Js",
+    stacks: "next.js,Css,Js",
   },
 ];
 
@@ -31,17 +35,17 @@ const intermediateProjects = [
     title: "Roadlux Rentals",
     description: "Car rental dashboard with Supabase and authentication.",
     image: image2,
-    live: "https://vercel.com/chanel-bandits-projects/roadlux-rental/4DdNehJSjmsQkneE4N8JayBSwWCt",
+    live: "https://roadlux-rental.vercel.app/",
     github: "https://github.com/Code-banditt/Roadlux.git",
     stacks: "React, Next.js, Tailwind, Supabase",
   },
   {
-    title: "Food Finder",
-    description: "React app with API search and filtering.",
-    image: "/placeholder4.jpg",
-    live: "#",
+    title: "MY Portfolio",
+    description: "Static portfolio site built with NEXT.js.",
+    image: image3,
+    live: "https://portfolio-hazel-eight-sgqniazq22.vercel.app/",
     github: "#",
-    stacks: "HTML,Css,Js",
+    stacks: "next.js,Css,Js",
   },
 ];
 
@@ -50,18 +54,20 @@ const advancedProjects = [
     title: "Wanderlust",
     description:
       "Fullstack travel planner with Next.js, MongoDB, and API integrations.",
-    image: "/placeholder5.jpg",
-    live: "#",
+    image: image6,
+    live: "https://wanderlust-gray-phi.vercel.app/",
     github: "#",
-    stacks: "React, Next.js, Tailwind, Supabase",
+    stacks: "React, Next.js, Tailwind, Node.js, MongoDB",
   },
   {
-    title: "RoadLux",
-    description: "Car rental dashboard with Supabase and authentication.",
-    image: "/placeholder6.jpg",
-    live: "#",
+    title: "Planora",
+    description:
+      "Appointment booking app with real-time updates using Socket.io.",
+    image: image4,
+    live: "https://planora-inky.vercel.app/",
     github: "#",
-    stacks: "HTML,Css,Js",
+    stacks:
+      "next.js, Socket.io, Tailwind, typeScript, Node.js, react, Express, mongoDB, antd, framer-motion",
   },
 ];
 

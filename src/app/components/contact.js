@@ -77,7 +77,7 @@ export default function ContactSection({ id }) {
 
       <div className="flex justify-center gap-6 mt-10 text-xl text-gray-400">
         <a
-          href="https://github.com/yourusername"
+          href="https://github.com/Code-banditt"
           target="_blank"
           rel="noreferrer"
           className="hover:text-white"
@@ -85,14 +85,14 @@ export default function ContactSection({ id }) {
           GitHub
         </a>
         <a
-          href="https://linkedin.com/in/yourusername"
+          href="https://www.linkedin.com/in/anthony-ebube-8a36a71b4/overlay/about-this-profile/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BS5Vu%2BKoyS1qL%2Bx%2B9qbQMYA%3D%3D"
           target="_blank"
           rel="noreferrer"
           className="hover:text-white"
         >
           LinkedIn
         </a>
-        <a href="mailto:you@example.com" className="hover:text-white">
+        <a href="nwodotony02@gmail.com" className="hover:text-white">
           Email
         </a>
       </div>

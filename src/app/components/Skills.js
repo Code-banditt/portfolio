@@ -11,10 +11,12 @@ const skills = [
   { name: "HTML", stars: 5, level: "Expert" },
   { name: "CSS", stars: 3, level: "Intermediate" },
   { name: "JavaScript", stars: 4, level: "Master" },
-  { name: "Node.js", stars: 3, level: "Intermediate" },
+  { name: "Node.js", stars: 4, level: "Master" },
   { name: "Tailwind", stars: 4, level: "Master" },
   { name: "MongoDB", stars: 4, level: "Master" },
   { name: "Typescript", stars: 2, level: "Beginner" },
+  { name: "React Native", stars: 2, level: "Beginner" },
+  { name: "Socket.io", stars: 2, level: "Beginner" },
 ];
 
 const levels = ["All", "Expert", "Master", "Intermediate", "Beginner"];
