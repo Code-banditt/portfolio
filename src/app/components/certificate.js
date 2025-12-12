@@ -1,14 +1,8 @@
-// components/CertificatesSection.tsx
-
 "use client";
 
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Space_Grotesk } from "next/font/google";
-
-import image1 from "/public/img/react.jpg";
-import image2 from "/public/img/nodejs.jpg";
-import image3 from "/public/img/html.jpg";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -20,13 +14,13 @@ const certificates = [
     title: "Modern React, Next.js and Redux",
     platform: "Udemy",
     date: "Jan 2025",
-    image: image1,
+    image: "/img/react.jpg", // use public folder path
   },
   {
     title: "Node.js: The Complete Guide",
     platform: "Udemy",
     date: "June 2025",
-    image: image2,
+    image: "/img/nodejs.jpg",
   },
   {
     title: "Mastering JavaScript",
@@ -34,7 +28,12 @@ const certificates = [
     date: "April 2024",
     image: "/certs/js.png",
   },
-  { title: "HTML/CSS", platform: "Udemy", date: "Jan 2024", image: image3 },
+  {
+    title: "HTML/CSS",
+    platform: "Udemy",
+    date: "Jan 2024",
+    image: "/img/html.jpg",
+  },
 ];
 
 export default function CertificatesSection({ id }) {
@@ -45,7 +44,8 @@ export default function CertificatesSection({ id }) {
     >
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.6 }}
         className="text-4xl font-bold mb-12 text-center text-teal-400"
       >
@@ -56,8 +56,8 @@ export default function CertificatesSection({ id }) {
         {certificates.map((cert, index) => (
           <motion.div
             key={index}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 30, x: -50 }}
+            whileInView={{ opacity: 1, y: 0, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.2, type: "spring", stiffness: 120 }}
             className="bg-[#1a1a1a] rounded-2xl overflow-hidden border border-[#333] hover:border-teal-400 shadow-[0_0_20px_rgba(0,255,255,0.2)] hover:shadow-[0_0_40px_rgba(0,255,255,0.4)] transition transform hover:scale-105"

@@ -6,13 +6,6 @@ import { useInView } from "react-intersection-observer";
 import Link from "next/link";
 import { Space_Grotesk } from "next/font/google";
 
-import image1 from "/public/img/doggity.png";
-import image2 from "/public/img/roadlux.png";
-import image3 from "/public/img/portfolioimage.png";
-import image4 from "/public/img/planora2.png";
-import image5 from "/public/img/unis.png";
-import image6 from "/public/img/wanderlst.png";
-
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
@@ -23,7 +16,7 @@ const beginnerProjects = [
     title: "WOOF",
     description:
       "Simple HTML/CSS project with a little bit of JavaScript, my first web dev project.",
-    image: image1,
+    image: "/img/doggity.png", // ✅ reference public folder directly
     live: "https://dog-website-plum.vercel.app",
     github: "https://github.com/Code-banditt/dog-website-.git",
     stacks: ["HTML", "CSS", "JS"],
@@ -31,7 +24,7 @@ const beginnerProjects = [
   {
     title: "Find Universities",
     description: "Static research site built with React and API integrations.",
-    image: image5,
+    image: "/img/unis.png",
     live: "https://worlds-universities.vercel.app/",
     github: "#",
     stacks: ["Next.js", "CSS", "JS"],
@@ -42,7 +35,7 @@ const intermediateProjects = [
   {
     title: "Roadlux Rentals",
     description: "Car rental dashboard with Supabase and authentication.",
-    image: image2,
+    image: "/img/roadlux.png",
     live: "https://roadlux-rental.vercel.app/",
     github: "https://github.com/Code-banditt/Roadlux.git",
     stacks: ["React", "Next.js", "Tailwind", "Supabase"],
@@ -50,7 +43,7 @@ const intermediateProjects = [
   {
     title: "MY Portfolio",
     description: "Static portfolio site built with NEXT.js.",
-    image: image3,
+    image: "/img/portfolioimage.png",
     live: "https://portfolio-hazel-eight-sgqniazq22.vercel.app/",
     github: "#",
     stacks: ["Next.js", "CSS", "JS"],
@@ -62,7 +55,7 @@ const advancedProjects = [
     title: "Wanderlust",
     description:
       "Fullstack travel planner with Next.js, MongoDB, and API integrations.",
-    image: image6,
+    image: "/img/wanderlst.png",
     live: "https://wanderlust-gray-phi.vercel.app/",
     github: "#",
     stacks: ["React", "Next.js", "Tailwind", "Node.js", "MongoDB"],
@@ -71,7 +64,7 @@ const advancedProjects = [
     title: "Planora",
     description:
       "Appointment booking app with real-time updates using Socket.io.",
-    image: image4,
+    image: "/img/planora2.png",
     live: "https://planora-inky.vercel.app/",
     github: "#",
     stacks: [
@@ -107,8 +100,8 @@ const SectionBlock = ({ title, projects, delayOffset = 0 }) => {
         {projects.map((project, index) => (
           <motion.div
             key={project.title}
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            initial={{ opacity: 0, y: 30, x: -50 }}
+            animate={inView ? { opacity: 1, y: 0, x: 0 } : {}}
             transition={{
               delay: index * 0.1 + delayOffset,
               type: "spring",

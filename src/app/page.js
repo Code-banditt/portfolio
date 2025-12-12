@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Navbar from "./components/header";
-import image1 from "/public/img/portfolio.png";
 
 import Skills from "./components/Skills";
 import HonorableMentions from "./components/honorableMention";
@@ -114,7 +113,7 @@ export default function HeroDark() {
             <Image
               height={500}
               width={500}
-              src={image1}
+              src="/img/portfolio.png"
               alt="Profile"
               className="w-full h-full object-cover opacity-90"
             />
