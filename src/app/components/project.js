@@ -4,29 +4,37 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
 import Link from "next/link";
-import image1 from "/public/img/doggity.png"; // ✅ Assuming correct import
+import { Space_Grotesk } from "next/font/google";
+
+import image1 from "/public/img/doggity.png";
 import image2 from "/public/img/roadlux.png";
 import image3 from "/public/img/portfolioimage.png";
-import image4 from "/public/img/planora.png";
+import image4 from "/public/img/planora2.png";
 import image5 from "/public/img/unis.png";
-import image6 from "/public/img/wanderlust.png";
+import image6 from "/public/img/wanderlst.png";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
+
 const beginnerProjects = [
   {
     title: "WOOF",
     description:
-      "Simple HTML/CSS project with a little bit of javascript, my first project in my web dev journey.",
+      "Simple HTML/CSS project with a little bit of JavaScript, my first web dev project.",
     image: image1,
     live: "https://dog-website-plum.vercel.app",
     github: "https://github.com/Code-banditt/dog-website-.git",
-    stacks: "HTML, Css, Js",
+    stacks: ["HTML", "CSS", "JS"],
   },
   {
     title: "Find Universities",
-    description: "Static Research site built with react and api integrations.",
+    description: "Static research site built with React and API integrations.",
     image: image5,
     live: "https://worlds-universities.vercel.app/",
     github: "#",
-    stacks: "next.js,Css,Js",
+    stacks: ["Next.js", "CSS", "JS"],
   },
 ];
 
@@ -37,7 +45,7 @@ const intermediateProjects = [
     image: image2,
     live: "https://roadlux-rental.vercel.app/",
     github: "https://github.com/Code-banditt/Roadlux.git",
-    stacks: "React, Next.js, Tailwind, Supabase",
+    stacks: ["React", "Next.js", "Tailwind", "Supabase"],
   },
   {
     title: "MY Portfolio",
@@ -45,7 +53,7 @@ const intermediateProjects = [
     image: image3,
     live: "https://portfolio-hazel-eight-sgqniazq22.vercel.app/",
     github: "#",
-    stacks: "next.js,Css,Js",
+    stacks: ["Next.js", "CSS", "JS"],
   },
 ];
 
@@ -57,7 +65,7 @@ const advancedProjects = [
     image: image6,
     live: "https://wanderlust-gray-phi.vercel.app/",
     github: "#",
-    stacks: "React, Next.js, Tailwind, Node.js, MongoDB",
+    stacks: ["React", "Next.js", "Tailwind", "Node.js", "MongoDB"],
   },
   {
     title: "Planora",
@@ -66,8 +74,18 @@ const advancedProjects = [
     image: image4,
     live: "https://planora-inky.vercel.app/",
     github: "#",
-    stacks:
-      "next.js, Socket.io, Tailwind, typeScript, Node.js, react, Express, mongoDB, antd, framer-motion",
+    stacks: [
+      "Next.js",
+      "Socket.io",
+      "Tailwind",
+      "TypeScript",
+      "Node.js",
+      "React",
+      "Express",
+      "MongoDB",
+      "AntD",
+      "Framer Motion",
+    ],
   },
 ];
 
@@ -80,7 +98,7 @@ const SectionBlock = ({ title, projects, delayOffset = 0 }) => {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-2xl font-semibold mb-6"
+        className={`text-3xl sm:text-4xl font-bold mb-8 text-teal-400 ${spaceGrotesk.className}`}
       >
         {title}
       </motion.h3>
@@ -91,26 +109,50 @@ const SectionBlock = ({ title, projects, delayOffset = 0 }) => {
             key={project.title}
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: index * 0.1 + delayOffset }}
-            className="bg-[#1a1a1a] rounded-2xl overflow-hidden border border-[#2a2a2a] hover:scale-[1.02] transition"
+            transition={{
+              delay: index * 0.1 + delayOffset,
+              type: "spring",
+              stiffness: 120,
+            }}
+            whileHover={{ scale: 1.03 }}
+            className="bg-[#1a1a1a] rounded-3xl overflow-hidden border border-[#2a2a2a] shadow-[0_0_20px_rgba(0,255,255,0.2)] hover:shadow-[0_0_40px_rgba(0,255,255,0.5)] transition"
           >
-            <div className="aspect-video w-full bg-neutral-800">
+            {/* Project Image */}
+            <div className="aspect-video w-full bg-neutral-800 relative">
               <Image
                 src={project.image}
                 alt={project.title}
                 width={500}
                 height={500}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-t-3xl"
               />
             </div>
-            <div className="p-5 space-y-3">
-              <div>
-                <h3 className="text-lg font-semibold">{project.title}</h3>
-                <p className="text-sm text-gray-400">{project.description}</p>
-              </div>
-              <div>{project.stacks}</div>
 
-              <div className="flex gap-3 pt-2">
+            {/* Project Info */}
+            <div className="p-5 space-y-3">
+              <h3 className="text-lg font-semibold text-teal-400">
+                {project.title}
+              </h3>
+              <p
+                className={`text-gray-300 leading-relaxed ${spaceGrotesk.className}`}
+              >
+                {project.description}
+              </p>
+
+              {/* Stacks */}
+              <div className="flex flex-wrap gap-2 mt-2">
+                {project.stacks.map((stack, i) => (
+                  <span
+                    key={i}
+                    className="px-2 py-1 text-xs font-medium bg-teal-400/20 text-teal-400 rounded-full backdrop-blur-sm"
+                  >
+                    {stack}
+                  </span>
+                ))}
+              </div>
+
+              {/* Links */}
+              <div className="flex gap-3 pt-3">
                 <Link
                   href={project.live}
                   target="_blank"
@@ -136,13 +178,16 @@ const SectionBlock = ({ title, projects, delayOffset = 0 }) => {
 
 export default function Projects({ id }) {
   return (
-    <section id={id} className="bg-[#111] text-white py-24 px-4">
+    <section
+      id={id}
+      className={`bg-[#111] text-white py-24 px-4 ${spaceGrotesk.className}`}
+    >
       <div className="max-w-6xl mx-auto">
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl font-bold text-center mb-16"
+          className="text-5xl font-bold text-center mb-16 text-teal-400"
         >
           Projects
         </motion.h2>

@@ -2,10 +2,18 @@
 
 "use client";
 
+import { motion } from "framer-motion";
 import Image from "next/image";
+import { Space_Grotesk } from "next/font/google";
+
 import image1 from "/public/img/react.jpg";
 import image2 from "/public/img/nodejs.jpg";
 import image3 from "/public/img/html.jpg";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
 
 const certificates = [
   {
@@ -26,38 +34,50 @@ const certificates = [
     date: "April 2024",
     image: "/certs/js.png",
   },
-
-  {
-    title: "HTML/CSS",
-    platform: "Udemy",
-    date: "jan 2024",
-    image: image3,
-  },
+  { title: "HTML/CSS", platform: "Udemy", date: "Jan 2024", image: image3 },
 ];
 
 export default function CertificatesSection({ id }) {
   return (
-    <section id={id} className="bg-[#111] text-white py-16 px-6 md:px-20">
-      <h2 className="text-3xl font-bold mb-10">🎓 Certificates</h2>
+    <section
+      id={id}
+      className={`bg-[#111] text-white py-20 px-6 md:px-20 ${spaceGrotesk.className}`}
+    >
+      <motion.h2
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-4xl font-bold mb-12 text-center text-teal-400"
+      >
+        🎓 Certificates
+      </motion.h2>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {certificates.map((cert, index) => (
-          <div
+          <motion.div
             key={index}
-            className="bg-[#1a1a1a] rounded-xl overflow-hidden shadow-lg hover:shadow-blue-500/40 transition duration-300"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.2, type: "spring", stiffness: 120 }}
+            className="bg-[#1a1a1a] rounded-2xl overflow-hidden border border-[#333] hover:border-teal-400 shadow-[0_0_20px_rgba(0,255,255,0.2)] hover:shadow-[0_0_40px_rgba(0,255,255,0.4)] transition transform hover:scale-105"
           >
-            <Image
-              height={500}
-              width={500}
-              src={cert.image}
-              alt={cert.title}
-              className="w-full h-80 object-cover"
-            />
-            <div className="p-5">
-              <h3 className="text-xl font-semibold">{cert.title}</h3>
+            <div className="relative w-full h-64">
+              <Image
+                src={cert.image}
+                alt={cert.title}
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="p-5 space-y-2">
+              <h3 className="text-xl font-semibold text-teal-400">
+                {cert.title}
+              </h3>
               <p className="text-sm text-gray-400">{cert.platform}</p>
               <p className="text-xs text-gray-500">{cert.date}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>
