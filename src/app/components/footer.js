@@ -106,7 +106,7 @@ export default function Footer() {
           transition={{ delay: 0.4 }}
           className="text-xs text-neutral-500 mt-4"
         >
-          Built with ❤️ using Next.js & Tailwind CSS
+          Built using Next.js & Tailwind CSS
         </motion.p>
       </div>
     </footer>

@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Navbar from "./components/header";
-
 import Skills from "./components/Skills";
 import HonorableMentions from "./components/honorableMention";
 import Projects from "./components/project";
@@ -21,143 +20,330 @@ export default function HeroDark() {
   return (
     <>
       <Navbar />
-
       <section
         id="home"
-        className="relative min-h-screen bg-[#0b0b0b] text-white flex flex-col-reverse md:flex-row items-center justify-center gap-6 md:gap-8 px-6 sm:px-12 md:px-20 py-10 overflow-hidden"
+        className="relative min-h-screen bg-gradient-to-br from-[#0b0b0b] via-[#101010] to-[#0b0b0b] text-white overflow-hidden pt-20 md:pt-24"
       >
-        {/* ✨ PARTICLE FIELD (Behind Everything) */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(40)].map((_, i) => (
-            <motion.span
+        {/* ENHANCED ANIMATED BACKGROUND */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Animated Grid */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.03)_1px,transparent_1px)] bg-[size:60px_60px] md:bg-[size:80px_80px]" />
+
+          {/* Floating Particles */}
+          {[...Array(30)].map((_, i) => (
+            <motion.div
               key={i}
-              initial={{
-                opacity: 0.1,
-                scale: Math.random() * 0.6 + 0.4,
+              className="absolute w-1 h-1 rounded-full bg-teal-400/40"
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
               }}
               animate={{
-                x: [Math.random() * 800 - 400, Math.random() * 800 - 400],
-                y: [Math.random() * 600 - 300, Math.random() * 600 - 300],
-                opacity: [0.1, 0.4, 0.1],
+                y: [0, Math.random() * 100 - 50],
+                x: [0, Math.random() * 100 - 50],
+                opacity: [0.2, 0.8, 0.2],
               }}
               transition={{
-                duration: Math.random() * 12 + 6,
+                duration: Math.random() * 10 + 10,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute w-2 h-2 rounded-full bg-teal-400/60 blur-[2px]"
-              style={{
-                top: Math.random() * 100 + "%",
-                left: Math.random() * 100 + "%",
-              }}
             />
           ))}
+
+          {/* Gradient Orbs */}
+          <motion.div
+            animate={{
+              x: [0, 100, 0],
+              y: [0, -50, 0],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-teal-500/5 blur-3xl"
+          />
+          <motion.div
+            animate={{
+              x: [0, -80, 0],
+              y: [0, 60, 0],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 2,
+            }}
+            className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-cyan-500/5 blur-3xl"
+          />
         </div>
 
-        {/* LEFT TEXT */}
-        <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1 }}
-          className="flex-1 text-center md:text-left space-y-6 z-10"
-        >
-          {/* Small Tagline */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className={`uppercase tracking-widest text-teal-400 text-xs sm:text-sm ${spaceGrotesk.className}`}
-          >
-            Full Stack Developer
-          </motion.p>
-
-          {/* Main Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className={`${spaceGrotesk.className} text-4xl sm:text-5xl md:text-6xl font-light leading-tight`}
-          >
-            Hello, I’m <br />
-            <span className="font-semibold text-teal-400">Nwodo Anthony</span>
-          </motion.h1>
-
-          {/* Sub Text */}
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6 }}
-            className={`${inter.className} text-gray-300 text-base sm:text-lg leading-relaxed max-w-xl mx-auto md:mx-0`}
-          >
-            I build modern web applications using Next.js, React, Node.js,
-            animations, and performance-focused engineering—creating products
-            that feel fast, smooth, and visually engaging.
-          </motion.p>
-        </motion.div>
-
-        {/* RIGHT IMAGE + ORBITS */}
-        <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1 }}
-          className="flex-1 flex justify-center md:justify-end relative z-10 md:ml-[-20px]"
-        >
-          {/* Floating Image */}
-          <motion.div
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="relative z-20 w-[220px] sm:w-[300px] md:w-[360px] 
-              h-[300px] sm:h-[450px] md:h-[520px]
-              bg-gray-900 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,255,255,0.4)]"
-          >
-            <Image
-              height={500}
-              width={500}
-              src="/img/portfolio.png"
-              alt="Profile"
-              className="w-full h-full object-cover opacity-90"
-            />
-          </motion.div>
-
-          {/* ORBIT TAGS */}
-          <div className="hidden lg:block">
-            {[
-              { label: "Full Stack", color: "#0ff" },
-              { label: "Next.js", color: "#14b8a6" },
-              { label: "Node.js", color: "#56ffca" },
-              { label: "MongoDB", color: "#24e08a" },
-            ].map((item, i) => (
+        {/* MAIN CONTENT CONTAINER */}
+        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center py-12 md:py-0">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center w-full">
+            {/* LEFT CONTENT - MOBILE FIRST */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-center lg:text-left space-y-6 md:space-y-8 order-2 lg:order-1"
+            >
+              {/* Badge */}
               <motion.div
-                key={i}
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 12 + i * 2,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-                className="absolute left-1/2 top-1/2"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-500/10 border border-teal-400/30 backdrop-blur-sm"
               >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-400"></span>
+                </span>
+                <span
+                  className={`text-sm font-medium text-teal-400 ${spaceGrotesk.className}`}
+                >
+                  Open to Opportunities
+                </span>
+              </motion.div>
+
+              {/* Main Heading */}
+              <div className="space-y-4 md:space-y-6">
+                <motion.h1
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className={`${spaceGrotesk.className} text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight`}
+                >
+                  <span className="block text-white">Hello, I Am</span>
+                  <span className="block bg-gradient-to-r from-teal-400 via-cyan-400 to-teal-500 bg-clip-text text-transparent">
+                    Nwodo Anthony
+                  </span>
+                </motion.h1>
+
+                {/* Subheading */}
+                <motion.h2
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
+                  className={`${spaceGrotesk.className} text-xl sm:text-2xl md:text-3xl font-light text-gray-300`}
+                >
+                  Full Stack Developer & Creative Engineer
+                </motion.h2>
+              </div>
+
+              {/* Description */}
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className={`${inter.className} text-gray-400 text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl mx-auto lg:mx-0`}
+              >
+                I craft high-performance web applications with modern stacks
+                like{" "}
+                <span className="text-teal-300 font-semibold">Next.js</span>,{" "}
+                <span className="text-teal-300 font-semibold">React</span>, and{" "}
+                <span className="text-teal-300 font-semibold">Node.js</span>.
+                Focused on creating seamless user experiences through{" "}
+                <span className="text-cyan-300 font-semibold">animations</span>{" "}
+                and{" "}
+                <span className="text-cyan-300 font-semibold">
+                  optimized performance
+                </span>
+                .
+              </motion.p>
+
+              {/* Tech Stack Tags - Mobile Friendly */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1 }}
+                className="flex flex-wrap gap-3 justify-center lg:justify-start"
+              >
+                {[
+                  "Next.js",
+                  "React",
+                  "TypeScript",
+                  "Node.js",
+                  "MongoDB",
+                  "Tailwind CSS",
+                ].map((tech, i) => (
+                  <motion.span
+                    key={tech}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: 1 + i * 0.1 }}
+                    className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm 
+                    text-sm font-medium text-gray-300 hover:text-teal-300 hover:border-teal-400/30 
+                    transition-all duration-300 cursor-default"
+                  >
+                    {tech}
+                  </motion.span>
+                ))}
+              </motion.div>
+
+              {/* CTA Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.2 }}
+                className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4"
+              >
+                <motion.a
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  href="#projects"
+                  className="px-8 py-3 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 
+                  text-white font-semibold text-sm md:text-base shadow-lg shadow-teal-500/25 
+                  hover:shadow-teal-500/40 transition-all duration-300"
+                >
+                  View My Work
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  href="#contact"
+                  className="px-8 py-3 rounded-full bg-white/5 border border-white/20 
+                  text-white font-semibold text-sm md:text-base backdrop-blur-sm
+                  hover:bg-white/10 hover:border-white/30 transition-all duration-300"
+                >
+                  Get In Touch
+                </motion.a>
+              </motion.div>
+            </motion.div>
+
+            {/* RIGHT CONTENT - PROFILE IMAGE */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 0.4 }}
+              className="relative flex justify-center lg:justify-end order-1 lg:order-2"
+            >
+              <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px]">
+                {/* Outer Glow Ring */}
                 <motion.div
                   animate={{
-                    x: Math.cos(i * 2) * 200,
-                    y: Math.sin(i * 2) * 200,
+                    rotate: 360,
                   }}
-                  transition={{ repeat: Infinity, duration: 0 }}
-                  className="absolute px-4 py-2 rounded-xl backdrop-blur-md 
-                    border shadow-[0_0_20px_rgba(0,255,255,0.5)]
-                    font-semibold"
+                  transition={{
+                    duration: 20,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className="absolute inset-0 rounded-full p-1"
                   style={{
-                    background: "rgba(255,255,255,0.08)",
-                    borderColor: item.color,
-                    color: item.color,
+                    background:
+                      "conic-gradient(from 0deg, transparent, #0ff, transparent)",
                   }}
                 >
-                  {item.label}
+                  <div className="w-full h-full rounded-full bg-[#0b0b0b]" />
                 </motion.div>
-              </motion.div>
-            ))}
+
+                {/* Inner Gradient Ring */}
+                <motion.div
+                  animate={{
+                    rotate: -360,
+                  }}
+                  transition={{
+                    duration: 25,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className="absolute inset-8 rounded-full p-1"
+                  style={{
+                    background:
+                      "conic-gradient(from 180deg, transparent, #14b8a6, transparent)",
+                  }}
+                >
+                  <div className="w-full h-full rounded-full bg-[#0b0b0b]" />
+                </motion.div>
+
+                {/* Floating Image Container */}
+                <motion.div
+                  animate={{
+                    y: [0, -15, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute inset-12 rounded-2xl overflow-hidden 
+                    border-4 border-white/10 backdrop-blur-sm
+                    shadow-[0_0_80px_rgba(20,184,166,0.3)]"
+                >
+                  <Image
+                    height={500}
+                    width={500}
+                    src="/img/portfolio.png"
+                    alt="Nwodo Anthony - Full Stack Developer"
+                    className="w-full h-full object-cover"
+                    priority
+                  />
+                </motion.div>
+
+                {/* Floating Tech Badges - Hidden on mobile, shown on tablet+ */}
+                <div className="hidden md:block">
+                  {[
+                    {
+                      text: "Full Stack",
+                      pos: "top-0 left-1/2 -translate-x-1/2 -translate-y-1/2",
+                    },
+                    {
+                      text: "Next.js",
+                      pos: "top-1/2 right-0 translate-x-1/2 -translate-y-1/2",
+                    },
+                    {
+                      text: "React",
+                      pos: "bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2",
+                    },
+                    {
+                      text: "Node.js",
+                      pos: "top-1/2 left-0 -translate-x-1/2 -translate-y-1/2",
+                    },
+                  ].map((badge, i) => (
+                    <motion.div
+                      key={badge.text}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.5, delay: 1 + i * 0.2 }}
+                      whileHover={{ scale: 1.1 }}
+                      className={`absolute ${badge.pos} px-4 py-2 rounded-full 
+                        bg-gradient-to-r from-teal-500/20 to-cyan-500/20 
+                        border border-teal-400/30 backdrop-blur-md
+                        text-sm font-semibold text-teal-300 shadow-lg`}
+                    >
+                      {badge.text}
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
           </div>
-        </motion.div>
+
+          {/* SCROLL INDICATOR */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 2 }}
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block"
+          >
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="flex flex-col items-center gap-2"
+            >
+              <span className="text-sm text-gray-400">Scroll</span>
+              <div className="w-6 h-10 rounded-full border-2 border-teal-400/50 flex justify-center">
+                <motion.div
+                  animate={{ y: [0, 12, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="w-1 h-3 rounded-full bg-teal-400 mt-2"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       {/* OTHER SECTIONS */}
