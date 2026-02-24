@@ -67,8 +67,6 @@ const projectsData = {
       difficulty: "★★☆",
       features: ["3D Effects", "Smooth Scroll"],
     },
-  ],
-  Advanced: [
     {
       title: "Wanderlust",
       description:
@@ -77,9 +75,11 @@ const projectsData = {
       live: "https://wanderlust-gray-phi.vercel.app",
       github: "https://github.com/Code-banditt/wanderlust",
       stacks: ["React", "Next.js", "Tailwind", "Node.js"],
-      difficulty: "★★★",
+      difficulty: "★★☆",
       features: ["Multiple API Integrations", "Travel Maps"],
     },
+  ],
+  Advanced: [
     {
       title: "Planora",
       description:
@@ -101,6 +101,17 @@ const projectsData = {
       stacks: ["Next.js", "Typescript", "Node.js"],
       difficulty: "★★★",
       features: ["Cart System", "Order History"],
+    },
+
+    {
+      title: "Planora V2",
+      description: "Real-time appointment scheduling",
+      image: "/img/planorav2.png",
+      live: "https://planoraversiontwo.vercel.app",
+      github: "https://github.com/Code-banditt/PlanoraV2",
+      stacks: ["Next.js", "Socket.io", "Typescript", "Node.js"],
+      difficulty: "★★★",
+      features: ["Real-Time Messaging", "Voice Messaging", "Notifications"],
     },
   ],
 };
@@ -255,7 +266,7 @@ const Carousel = ({ projects }) => {
     const newX = Math.max(x - (cardWidth + 20) * visibleCards, maxX);
     setX(newX);
     setCurrentSlide(
-      Math.min(projects.length - visibleCards, currentSlide + visibleCards)
+      Math.min(projects.length - visibleCards, currentSlide + visibleCards),
     );
   };
 
@@ -316,7 +327,7 @@ const Carousel = ({ projects }) => {
                   : "bg-white/30 hover:bg-white/50"
               }`}
             />
-          )
+          ),
         )}
       </div>
 
