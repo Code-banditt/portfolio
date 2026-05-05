@@ -21,6 +21,7 @@ import {
   SiRedux,
   SiFirebase,
   SiGraphql,
+  SiPostgresql,
 } from "react-icons/si";
 
 const skills = [
@@ -124,23 +125,23 @@ const skills = [
   },
   {
     name: "Figma",
-    stars: 3,
-    level: "Intermediate",
+    stars: 2,
+    level: "Beginner",
     icon: <SiFigma />,
     color: "#F24E1E",
   },
   {
-    name: "Firebase",
-    stars: 3,
-    level: "Intermediate",
-    icon: <SiFirebase />,
+    name: "React Native",
+    stars: 4,
+    level: "Advanced",
+    icon: <SiReact />,
     color: "#FFCA28",
   },
   {
-    name: "GraphQL",
-    stars: 2,
-    level: "Beginner",
-    icon: <SiGraphql />,
+    name: "PostgreSQL",
+    stars: 3,
+    level: "Intermediate",
+    icon: <SiPostgresql />,
     color: "#E10098",
   },
 ];
@@ -291,10 +292,10 @@ export default function Skills() {
                       skill.level === "Expert"
                         ? "bg-teal-500/20 text-teal-300 border border-teal-400/30"
                         : skill.level === "Advanced"
-                        ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400/30"
-                        : skill.level === "Intermediate"
-                        ? "bg-blue-500/20 text-blue-300 border border-blue-400/30"
-                        : "bg-gray-500/20 text-gray-300 border border-gray-400/30"
+                          ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400/30"
+                          : skill.level === "Intermediate"
+                            ? "bg-blue-500/20 text-blue-300 border border-blue-400/30"
+                            : "bg-gray-500/20 text-gray-300 border border-gray-400/30"
                     }`}
                   >
                     {skill.level}
