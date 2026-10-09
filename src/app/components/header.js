@@ -1,320 +1,286 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Link as ScrollLink,
-  Events,
-  animateScroll as scroll,
-} from "react-scroll";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
   X,
-  Home,
-  FolderKanban,
-  Award,
-  Mail,
-  FileUser,
-  Briefcase,
+  Sun,
+  Moon,
+  ArrowUpRight,
+  Terminal,
+  Circle,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
   const [scrolled, setScrolled] = useState(false);
-  const [hoveredLink, setHoveredLink] = useState(null);
+  const [activeSection, setActiveSection] = useState("home");
+  const [theme, setTheme] = useState("dark");
+  const [time, setTime] = useState("");
 
-  const handleToggle = () => setMenuOpen(!menuOpen);
-  const handleLinkClick = () => setMenuOpen(false);
-
-  // Track scroll to add shadow to navbar
+  // Live real-time clock in West Africa Time (UTC+1)
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const updateTime = () => {
+      const now = new Date();
+      setTime(
+        now.toLocaleTimeString("en-US", {
+          timeZone: "Africa/Lagos",
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+      );
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Sync theme with document class & localStorage
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark");
+    setTheme(isDark ? "dark" : "light");
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    if (nextTheme === "dark") {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("nordic-theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("nordic-theme", "light");
+    }
+  };
+
+  // Scroll detection for border emphasis
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Listen for scroll events to highlight active section
+  // Section tracking
   useEffect(() => {
-    const handleSetActive = (to) => setActiveSection(to);
-
-    Events.scrollEvent.register("begin", handleSetActive);
-    Events.scrollEvent.register("end", handleSetActive);
-
-    // Also track sections via Intersection Observer
     const sections = [
       "home",
-      "skills",
       "projects",
+      "skills",
       "experience",
       "certificates",
       "contact",
     ];
-    const observers = sections.map((section) => {
-      const element = document.getElementById(section);
-      if (!element) return;
 
-      const observer = new IntersectionObserver(
+    const observers = sections.map((sec) => {
+      const el = document.getElementById(sec);
+      if (!el) return null;
+      const obs = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
-            setActiveSection(section);
+            setActiveSection(sec);
           }
         },
-        { threshold: 0.5, rootMargin: "-50% 0px -50% 0px" }
+        { threshold: 0.3 }
       );
-
-      observer.observe(element);
-      return observer;
+      obs.observe(el);
+      return obs;
     });
 
-    return () => {
-      Events.scrollEvent.remove("begin");
-      Events.scrollEvent.remove("end");
-      observers.forEach((obs) => obs && obs.disconnect());
-    };
+    return () => observers.forEach((obs) => obs && obs.disconnect());
   }, []);
 
-  const scrollToTop = () => {
-    scroll.scrollToTop({ duration: 500 });
-    setActiveSection("home");
-  };
-
-  const links = [
-    { name: "Home", to: "home", icon: <Home size={18} /> },
-    { name: "Skills", to: "skills", icon: <FileUser size={18} /> },
-    { name: "Projects", to: "projects", icon: <FolderKanban size={18} /> },
-    { name: "Experience", to: "experience", icon: <Briefcase size={18} /> },
-    { name: "Certificates", to: "certificates", icon: <Award size={18} /> },
-    { name: "Contact", to: "contact", icon: <Mail size={18} /> },
-  ];
-
-  const socialLinks = [
-    {
-      icon: <FaGithub />,
-      href: "https://github.com/Code-banditt",
-      label: "GitHub",
-    },
-    {
-      icon: <FaLinkedin />,
-      href: "https://www.linkedin.com/in/anthony-nwodo-8a36a71b4",
-      label: "LinkedIn",
-    },
-    { icon: <FaTwitter />, href: "https://twitter.com", label: "Twitter" },
+  const navLinks = [
+    { num: "01", label: "Work", href: "#projects", id: "projects" },
+    { num: "02", label: "Capabilities", href: "#skills", id: "skills" },
+    { num: "03", label: "Chronology", href: "#experience", id: "experience" },
+    { num: "04", label: "Credentials", href: "#certificates", id: "certificates" },
+    { num: "05", label: "Inquiries", href: "#contact", id: "contact" },
   ];
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, type: "spring" }}
+    <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-gray-900/95 backdrop-blur-xl shadow-2xl shadow-black/30"
-          : "bg-gradient-to-b from-gray-900/90 via-gray-900/80 to-transparent"
+          ? "bg-[#F8F7F4]/90 dark:bg-[#0C0D0E]/90 backdrop-blur-md border-b border-[#DDD9CE] dark:border-[#202225] py-3.5 shadow-[0_1px_8px_rgba(0,0,0,0.03)]"
+          : "bg-[#F8F7F4]/60 dark:bg-[#0C0D0E]/60 backdrop-blur-sm border-b border-[#E8E5DC] dark:border-[#1A1C1E] py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-3 cursor-pointer"
-            onClick={scrollToTop}
+        <div className="flex items-center justify-between">
+          {/* Brand Monogram */}
+          <a
+            href="#home"
+            className="group flex items-center gap-3.5 text-inherit no-underline"
           >
-            <div className="relative">
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
-                <span className="text-white font-bold text-lg">NA</span>
-              </div>
-              <div className="absolute -inset-1 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 blur opacity-30" />
+            <div className="w-8 h-8 rounded-md bg-[#121314] text-[#F4F3EF] dark:bg-[#F4F3EF] dark:text-[#0C0D0E] font-mono text-xs font-semibold flex items-center justify-center transition-transform group-hover:scale-95 duration-200">
+              NA
             </div>
-            <div className="hidden sm:block">
-              <span className="text-xl font-bold bg-gradient-to-r from-teal-400 via-cyan-300 to-teal-400 bg-clip-text text-transparent">
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold tracking-tight text-[#121314] dark:text-[#F4F3EF] leading-tight">
                 Nwodo Anthony
               </span>
-              <p className="text-xs text-gray-400">Full Stack Developer</p>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#8E8D86] dark:text-[#6C6A64]">
+                Software Engineer
+              </span>
             </div>
-          </motion.div>
+          </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {/* Navigation Links */}
-            <ul className="flex items-center gap-1 bg-gray-800/50 backdrop-blur-sm rounded-full p-1 border border-white/10">
-              {links.map((link) => (
-                <motion.li
-                  key={link.to}
-                  className="relative"
-                  onMouseEnter={() => setHoveredLink(link.to)}
-                  onMouseLeave={() => setHoveredLink(null)}
+          {/* Desktop Architectural Nav */}
+          <nav className="hidden lg:flex items-center gap-1 border border-[#DDD9CE] dark:border-[#202225] rounded-full px-2 py-1 bg-[#FFFFFF]/70 dark:bg-[#131416]/70 backdrop-blur-md">
+            {navLinks.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <a
+                  key={item.num}
+                  href={item.href}
+                  className={`relative px-3.5 py-1.5 rounded-full text-xs font-mono transition-all duration-200 flex items-center gap-1.5 ${
+                    isActive
+                      ? "text-[#121314] dark:text-[#F4F3EF] font-medium"
+                      : "text-[#8E8D86] dark:text-[#6C6A64] hover:text-[#121314] dark:hover:text-[#F4F3EF]"
+                  }`}
                 >
-                  <ScrollLink
-                    to={link.to}
-                    smooth={true}
-                    duration={500}
-                    offset={-80}
-                    className={`relative flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium cursor-pointer transition-all ${
-                      activeSection === link.to
-                        ? "text-white"
-                        : "text-gray-300 hover:text-white"
-                    }`}
-                  >
-                    {activeSection === link.to && (
-                      <motion.div
-                        layoutId="activeTab"
-                        className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 border border-teal-400/30 rounded-full"
-                        transition={{
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                    <span className="relative z-10 flex items-center gap-2">
-                      {link.icon}
-                      {link.name}
-                    </span>
-                  </ScrollLink>
-                </motion.li>
-              ))}
-            </ul>
+                  {isActive && (
+                    <motion.div
+                      layoutId="activePill"
+                      className="absolute inset-0 bg-[#EDEAE3] dark:bg-[#202225] rounded-full -z-10"
+                      transition={{ type: "spring", stiffness: 400, damping: 35 }}
+                    />
+                  )}
+                  <span className="text-[10px] opacity-60">{item.num}</span>
+                  <span className="tracking-wide font-sans text-xs">{item.label}</span>
+                </a>
+              );
+            })}
+          </nav>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-3">
-              {socialLinks.map((social) => (
-                <motion.a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:text-teal-400 hover:border-teal-400/30 transition-all duration-300"
-                  aria-label={social.label}
-                >
-                  {social.icon}
-                </motion.a>
-              ))}
+          {/* Right Action & Utility Cluster */}
+          <div className="hidden sm:flex items-center gap-3">
+            {/* Live Clock / Location Pill */}
+            <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#DDD9CE] dark:border-[#202225] text-[11px] font-mono text-[#575855] dark:text-[#A09E96] bg-[#FFFFFF]/50 dark:bg-[#131416]/50">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-60"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span>WAT</span>
+              <span className="text-[#8E8D86] dark:text-[#6C6A64]">/</span>
+              <span>{time || "15:45:00"}</span>
             </div>
+
+            {/* Nordic Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle Nordic Theme"
+              className="p-2 rounded-full border border-[#DDD9CE] dark:border-[#202225] text-[#575855] dark:text-[#A09E96] hover:text-[#121314] dark:hover:text-[#F4F3EF] bg-[#FFFFFF]/50 dark:bg-[#131416]/50 transition-colors cursor-pointer"
+            >
+              {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+
+            {/* Direct Contact Button */}
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium tracking-tight bg-[#121314] text-[#F4F3EF] dark:bg-[#F4F3EF] dark:text-[#0C0D0E] hover:bg-[#2C3E35] dark:hover:bg-[#E8E6DF] transition-colors"
+            >
+              <span>Get in Touch</span>
+              <ArrowUpRight size={13} />
+            </a>
           </div>
 
-          {/* Mobile Menu Button */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            className="md:hidden p-2.5 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-white/20 transition-all"
-            onClick={handleToggle}
-            aria-label="Toggle Menu"
-          >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
-          </motion.button>
+          {/* Mobile Menu & Theme Toggle Trigger */}
+          <div className="flex sm:hidden items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle Nordic Theme"
+              className="p-2 rounded-full border border-[#DDD9CE] dark:border-[#202225] text-[#575855] dark:text-[#A09E96]"
+            >
+              {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle Mobile Menu"
+              className="p-2 rounded-lg border border-[#DDD9CE] dark:border-[#202225] text-[#121314] dark:text-[#F4F3EF]"
+            >
+              {menuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Architectural Drawer */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="md:hidden bg-gradient-to-b from-gray-900 to-gray-950 border-t border-white/10"
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="sm:hidden border-b border-[#DDD9CE] dark:border-[#202225] bg-[#F8F7F4] dark:bg-[#0C0D0E] overflow-hidden"
           >
-            <div className="px-4 py-6">
-              {/* Navigation Links */}
-              <ul className="space-y-2 mb-6">
-                {links.map((link, index) => (
-                  <motion.li
-                    key={link.to}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
+            <div className="px-6 py-8 space-y-6">
+              <div className="flex items-center justify-between text-xs font-mono text-[#8E8D86] dark:text-[#6C6A64] pb-4 border-b border-[#DDD9CE] dark:border-[#202225]">
+                <span>INDEX DIRECTORY</span>
+                <span>WAT {time}</span>
+              </div>
+              <div className="flex flex-col space-y-3">
+                {navLinks.map((item) => (
+                  <a
+                    key={item.num}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center justify-between py-2 text-base font-medium text-[#121314] dark:text-[#F4F3EF] hover:text-[#2C3E35] dark:hover:text-[#68B087]"
                   >
-                    <ScrollLink
-                      to={link.to}
-                      smooth={true}
-                      duration={500}
-                      offset={-80}
-                      onClick={handleLinkClick}
-                      className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium cursor-pointer transition-all ${
-                        activeSection === link.to
-                          ? "bg-gradient-to-r from-teal-500/20 to-cyan-500/20 text-teal-400 border border-teal-400/30"
-                          : "bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white"
-                      }`}
-                    >
-                      <span
-                        className={`${
-                          activeSection === link.to
-                            ? "text-teal-400"
-                            : "text-gray-400"
-                        }`}
-                      >
-                        {link.icon}
-                      </span>
-                      {link.name}
-                      {activeSection === link.to && (
-                        <div className="ml-auto w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-                      )}
-                    </ScrollLink>
-                  </motion.li>
-                ))}
-              </ul>
-
-              {/* Divider */}
-              <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-6" />
-
-              {/* Social Links */}
-              <div className="flex justify-center gap-4">
-                {socialLinks.map((social, index) => (
-                  <motion.a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6 + index * 0.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="p-3 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:text-teal-400 hover:border-teal-400/30 transition-all"
-                    aria-label={social.label}
-                  >
-                    {social.icon}
-                  </motion.a>
+                    <span className="font-sans">{item.label}</span>
+                    <span className="font-mono text-xs text-[#8E8D86] dark:text-[#6C6A64]">
+                      {item.num}
+                    </span>
+                  </a>
                 ))}
               </div>
 
-              {/* Contact CTA */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-                className="mt-6"
-              >
-                <ScrollLink
-                  to="contact"
-                  smooth={true}
-                  duration={500}
-                  offset={-80}
-                  onClick={handleLinkClick}
-                  className="block w-full text-center px-6 py-3.5 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40 transition-all"
+              <div className="pt-4 border-t border-[#DDD9CE] dark:border-[#202225] flex justify-between items-center">
+                <div className="flex gap-4 text-[#8E8D86] dark:text-[#6C6A64]">
+                  <a
+                    href="https://github.com/Code-banditt"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-[#121314] dark:hover:text-[#F4F3EF]"
+                  >
+                    <FaGithub size={18} />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/anthony-nwodo-8a36a71b4"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-[#121314] dark:hover:text-[#F4F3EF]"
+                  >
+                    <FaLinkedin size={18} />
+                  </a>
+                  <a
+                    href="https://twitter.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-[#121314] dark:hover:text-[#F4F3EF]"
+                  >
+                    <FaTwitter size={18} />
+                  </a>
+                </div>
+                <a
+                  href="#contact"
+                  onClick={() => setMenuOpen(false)}
+                  className="px-4 py-2 rounded-full text-xs font-medium bg-[#121314] text-[#F4F3EF] dark:bg-[#F4F3EF] dark:text-[#0C0D0E]"
                 >
-                  Get In Touch
-                </ScrollLink>
-              </motion.div>
+                  Direct Inquiry ↗
+                </a>
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Active Section Indicator - Desktop */}
-      <motion.div
-        className="hidden md:block absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-teal-400 to-cyan-400"
-        animate={{
-          width: scrolled ? "100%" : "0%",
-          opacity: scrolled ? 1 : 0,
-        }}
-        transition={{ duration: 0.3 }}
-      />
-    </motion.nav>
+    </header>
   );
 }

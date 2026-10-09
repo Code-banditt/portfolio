@@ -1,478 +1,492 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
-import { Space_Grotesk } from "next/font/google";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  FaExternalLinkAlt,
-  FaGithub,
-  FaArrowLeft,
-  FaArrowRight,
-  FaStar,
-  FaCode,
-} from "react-icons/fa";
+  ArrowUpRight,
+  Github,
+  Globe,
+  SlidersHorizontal,
+  X,
+  CheckCircle2,
+  Layers,
+  Sparkles,
+} from "lucide-react";
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-});
+const projectsData = [
+  {
+    id: "01",
+    title: "Planora V2",
+    tagline: "Real-time Appointment Scheduling & Collaboration Engine",
+    category: "Featured Systems",
+    year: "2025",
+    description:
+      "Enterprise-grade appointment scheduling ecosystem engineered with bidirectional WebSocket synchronization. Supports live calendar conflict resolution, voice notes, and real-time in-app notifications.",
+    challenge:
+      "Eliminating race conditions during concurrent appointment bookings while maintaining sub-50ms latency across live chat and voice note streams.",
+    solution:
+      "Implemented Socket.io rooms with state reconciliation, optimistic UI updates on the Next.js client, and Node.js event clustering.",
+    image: "/img/planorav2.png",
+    live: "https://planoraversiontwo.vercel.app",
+    github: "https://github.com/Code-banditt/PlanoraV2",
+    stacks: ["Next.js", "Socket.io", "TypeScript", "Node.js", "Tailwind CSS"],
+    highlights: [
+      "Bidirectional WebSocket event bus",
+      "Low-latency voice note delivery",
+      "Real-time calendar slot locking",
+    ],
+  },
+  {
+    id: "02",
+    title: "Biteblitz",
+    tagline: "High-Performance Food Commerce & Real-Time Tracking",
+    category: "Featured Systems",
+    year: "2024",
+    description:
+      "Full-stack on-demand food ordering platform designed for speed. Features persistent client-side cart reconciliation, dynamic categorization, and live simulated order status tracking.",
+    challenge:
+      "Preserving cart integrity across session drops and providing seamless checkout without layout shifts.",
+    solution:
+      "Architected modular React state with LocalStorage synchronization, structured MongoDB schemas, and TypeScript interfaces.",
+    image: "/img/biteblitz.png",
+    live: "https://biteblitz.vercel.app",
+    github: "https://github.com/Code-banditt/biteblitz",
+    stacks: ["Next.js", "TypeScript", "Node.js", "Tailwind CSS", "MongoDB"],
+    highlights: [
+      "Optimistic UI state management",
+      "Sub-second catalog search",
+      "End-to-end checkout workflow",
+    ],
+  },
+  {
+    id: "03",
+    title: "Roadlux Rentals",
+    tagline: "Fleet Inventory Management & Reservation Platform",
+    category: "Featured Systems",
+    year: "2024",
+    description:
+      "Vehicle rental solution featuring dynamic fleet filtering, user authentication via Supabase, and real-time booking calculations with an administrative analytics overview.",
+    challenge:
+      "Handling complex vehicle availability ranges, multi-tier pricing, and authenticated customer reservations securely.",
+    solution:
+      "Leveraged Supabase Row Level Security (RLS) with Next.js Server Components for secure data fetching and instant rendering.",
+    image: "/img/roadlux.png",
+    live: "https://roadlux-rental.vercel.app",
+    github: "https://github.com/Code-banditt/Roadlux",
+    stacks: ["React", "Next.js", "Tailwind CSS", "Supabase", "TypeScript"],
+    highlights: [
+      "Supabase Row Level Security",
+      "Live inventory availability checking",
+      "Responsive fleet management console",
+    ],
+  },
+  {
+    id: "04",
+    title: "Wanderlust",
+    tagline: "AI-Assisted Travel Discovery & Itinerary Engine",
+    category: "Web Platforms",
+    year: "2024",
+    description:
+      "Full-stack travel exploration platform offering destination analytics, interactive mapping interfaces, and AI-suggested itinerary generation for global nomads.",
+    challenge:
+      "Orchestrating state across multiple third-party travel APIs while maintaining snappy map interactions.",
+    solution:
+      "Employed Redux Toolkit for centralized asynchronous dispatching alongside Next.js route caching to prevent redundant API queries.",
+    image: "/img/wanderlst.png",
+    live: "https://wanderlust-gray-phi.vercel.app",
+    github: "https://github.com/Code-banditt/wanderlust",
+    stacks: ["React", "Next.js", "Tailwind CSS", "Node.js", "Redux Toolkit"],
+    highlights: [
+      "Centralized Redux state management",
+      "Interactive map overlays",
+      "Custom trip saving and export",
+    ],
+  },
+  {
+    id: "05",
+    title: "Planora (V1)",
+    tagline: "Initial Virtual Consultation Prototype",
+    category: "Explorations",
+    year: "2023",
+    description:
+      "The initial proof-of-concept prototype exploring virtual video consultation links, automated calendar booking, and basic WebSocket notification relays.",
+    challenge:
+      "Validating the core architectural hypothesis for automated real-time booking before building V2.",
+    solution:
+      "Rapidly built and deployed a Next.js + Node.js prototype with Socket.io integration to test user engagement.",
+    image: "/img/planora2.png",
+    live: "https://planora-inky.vercel.app",
+    github: "https://github.com/Code-banditt/Planora",
+    stacks: ["Next.js", "Socket.io", "TypeScript", "Node.js"],
+    highlights: [
+      "Proof-of-concept WebSocket bus",
+      "Calendar datepicker integration",
+      "Lightweight microservice backend",
+    ],
+  },
+  {
+    id: "06",
+    title: "WOOF Adoption",
+    tagline: "Tactile Animal Welfare & Adoption Experience",
+    category: "Explorations",
+    year: "2023",
+    description:
+      "A fluid animal adoption portal built with vanilla fundamentals, focusing on accessible layout hierarchy, custom micro-interactions, and high performance.",
+    challenge:
+      "Demonstrating fluid interactivity and responsive layout design with zero external heavy libraries.",
+    solution:
+      "Crafted native semantic HTML5, modern CSS Grid/Flexbox, and lightweight JavaScript event delegators.",
+    image: "/img/doggity.png",
+    live: "https://dog-website-plum.vercel.app",
+    github: "https://github.com/Code-banditt",
+    stacks: ["HTML5", "CSS3", "JavaScript"],
+    highlights: [
+      "100 Lighthouse performance score",
+      "Bespoke CSS animations",
+      "Accessible structure",
+    ],
+  },
+  {
+    id: "07",
+    title: "Find Universities",
+    tagline: "Higher Education Search & Filtering Engine",
+    category: "Web Platforms",
+    year: "2023",
+    description:
+      "Academic institution search tool connecting prospective students with universities globally through real-time debounced search and comprehensive institution dossiers.",
+    challenge:
+      "Filtering through large JSON datasets client-side without stuttering the main browser thread.",
+    solution:
+      "Implemented debounced query hooks and memoized filter algorithms inside a clean Next.js architecture.",
+    image: "/img/unis.png",
+    live: "#",
+    github: "https://github.com/Code-banditt",
+    stacks: ["Next.js", "CSS3", "JavaScript", "REST APIs"],
+    highlights: [
+      "Debounced live query filtering",
+      "Institution detail modals",
+      "Clean REST API consumption",
+    ],
+  },
+];
 
-const projectsData = {
-  Beginner: [
-    {
-      title: "WOOF",
-      description:
-        "A responsive dog adoption website with interactive features and animations.",
-      image: "/img/doggity.png",
-      live: "https://dog-website-plum.vercel.app",
-      github: "#",
-      stacks: ["HTML", "CSS", "JS"],
-      difficulty: "★☆☆",
-      features: ["Responsive Design", "Animations"],
-    },
-    {
-      title: "Find Universities",
-      description:
-        "University search platform with real-time filtering and detailed institution profiles.",
-      image: "/img/unis.png",
-      live: "#",
-      github: "#",
-      stacks: ["Next.js", "CSS", "JS"],
-      difficulty: "★☆☆",
-      features: ["API Integration", "Search Filters"],
-    },
-  ],
-  Intermediate: [
-    {
-      title: "Roadlux Rentals",
-      description:
-        "Car rental dashboard with real-time analytics and booking management system.",
-      image: "/img/roadlux.png",
-      live: "https://roadlux-rental.vercel.app",
-      github: "https://github.com/Code-banditt/Roadlux",
-      stacks: ["React", "Next.js", "Tailwind", "Supabase"],
-      difficulty: "★★☆",
-      features: ["Dashboard Analytics", "User Authentication"],
-    },
-    {
-      title: "MY Portfolio",
-      description:
-        "Modern portfolio with interactive 3D elements and smooth animations.",
-      image: "/img/portfolioimage.png",
-      live: "https://portfolio-hazel-eight-sgqniazq22.vercel.app",
-      github: "#",
-      stacks: ["Next.js", "CSS", "JS"],
-      difficulty: "★★☆",
-      features: ["3D Effects", "Smooth Scroll"],
-    },
-    {
-      title: "Wanderlust",
-      description:
-        "Full-stack travel planning platform with AI-powered itinerary suggestions.",
-      image: "/img/wanderlst.png",
-      live: "https://wanderlust-gray-phi.vercel.app",
-      github: "https://github.com/Code-banditt/wanderlust",
-      stacks: ["React", "Next.js", "Tailwind", "Node.js"],
-      difficulty: "★★☆",
-      features: ["Multiple API Integrations", "Travel Maps"],
-    },
-  ],
-  Advanced: [
-    {
-      title: "Planora",
-      description:
-        "Real-time appointment scheduling with video conferencing capabilities.",
-      image: "/img/planora2.png",
-      live: "https://planora-inky.vercel.app",
-      github: "https://github.com/Code-banditt/Planora",
-      stacks: ["Next.js", "Socket.io", "Typescript", "Node.js"],
-      difficulty: "★★★",
-      features: ["Calendar Sync", "Notifications"],
-    },
-    {
-      title: "Biteblitz",
-      description:
-        "Full-stack food delivery platform with live order tracking.",
-      image: "/img/biteblitz.png",
-      live: "https://biteblitz.vercel.app",
-      github: "https://github.com/Code-banditt/biteblitz",
-      stacks: ["Next.js", "Typescript", "Node.js"],
-      difficulty: "★★★",
-      features: ["Cart System", "Order History"],
-    },
+const categories = ["All", "Featured Systems", "Web Platforms", "Explorations"];
 
-    {
-      title: "Planora V2",
-      description: "Real-time appointment scheduling",
-      image: "/img/planorav2.png",
-      live: "https://planoraversiontwo.vercel.app",
-      github: "https://github.com/Code-banditt/PlanoraV2",
-      stacks: ["Next.js", "Socket.io", "Typescript", "Node.js"],
-      difficulty: "★★★",
-      features: ["Real-Time Messaging", "Voice Messaging", "Notifications"],
-    },
-  ],
-};
-
-// Individual Project Card Component
-// Enhanced Project Card - Fixed Click Issue
-const ProjectCard = ({ project }) => (
-  <motion.div
-    className="flex-shrink-0 w-full sm:w-[300px] md:w-[320px] lg:w-[340px] xl:w-[360px] rounded-3xl overflow-hidden bg-gradient-to-br from-[#0a0a0a]/90 to-[#111111]/90 backdrop-blur-xl border border-cyan-500/20 shadow-[0_0_60px_rgba(0,255,255,0.15)] hover:shadow-[0_0_80px_rgba(0,255,255,0.3)] cursor-pointer transition-all duration-500 hover:-translate-y-2 relative flex flex-col"
-    whileHover={{ scale: 1.02 }}
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-  >
-    {/* Background Glow - Behind everything now */}
-    <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
-
-    {/* Difficulty Badge */}
-    <div className="absolute -top-3 -right-3 z-10 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold px-4 py-1 rounded-full text-sm shadow-lg">
-      {project.difficulty}
-    </div>
-
-    {/* Image */}
-    <div className="relative w-full aspect-[16/9] overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
-      <Image
-        src={project.image}
-        alt={project.title}
-        width={600}
-        height={400}
-        className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
-      />
-      {/* Title overlay */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 p-4 sm:p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
-        <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
-          {project.title}
-        </h3>
-      </div>
-    </div>
-
-    {/* Card content */}
-    <div className="p-4 sm:p-6 flex flex-col flex-grow">
-      {/* Description */}
-      <p
-        className={`text-gray-300 text-sm leading-relaxed mb-3 ${spaceGrotesk.className}`}
-      >
-        {project.description}
-      </p>
-
-      {/* Features */}
-      <div className="mb-3">
-        <div className="flex items-center gap-2 mb-2">
-          <FaStar className="text-amber-400 text-sm" />
-          <span className="text-xs font-semibold text-gray-400">
-            KEY FEATURES
-          </span>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {project.features.map((feature, i) => (
-            <span
-              key={i}
-              className="px-2 py-1 text-xs bg-white/5 backdrop-blur-sm border border-white/10 rounded-full text-gray-300 hover:bg-white/10 transition-colors"
-            >
-              {feature}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Tech stack */}
-      <div className="mb-3 mt-auto">
-        <div className="flex items-center gap-2 mb-2">
-          <FaCode className="text-teal-400 text-sm" />
-          <span className="text-xs font-semibold text-gray-400">
-            TECH STACK
-          </span>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {project.stacks.map((stack, i) => (
-            <span
-              key={i}
-              className="px-2 py-1 text-xs font-medium bg-gradient-to-r from-teal-400/20 to-cyan-400/20 text-teal-300 rounded-full backdrop-blur-sm border border-teal-500/30 hover:border-teal-400/50 transition-all"
-            >
-              {stack}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex flex-wrap gap-2 mt-4">
-        <a
-          href={project.live}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative z-20 flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold bg-gradient-to-r from-orange-500 to-amber-500 text-black rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,140,0,0.4)]"
-        >
-          <FaExternalLinkAlt />
-          Live Demo
-        </a>
-
-        <a
-          href={project.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative z-20 flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold border border-white/20 bg-white/5 backdrop-blur-sm hover:bg-white/10 text-gray-300 hover:text-white rounded-xl transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
-        >
-          <FaGithub />
-          Code
-        </a>
-      </div>
-    </div>
-  </motion.div>
-);
-
-// Enhanced Carousel with Pagination
-const Carousel = ({ projects }) => {
-  const [x, setX] = useState(0);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const containerRef = useRef(null);
-  const [visibleCards, setVisibleCards] = useState(2);
-
-  useEffect(() => {
-    const updateVisible = () => {
-      const w = window.innerWidth;
-      if (w < 640) setVisibleCards(1);
-      else if (w < 1024) setVisibleCards(2);
-      else if (w < 1280) setVisibleCards(3);
-      else setVisibleCards(4);
-    };
-    updateVisible();
-    window.addEventListener("resize", updateVisible);
-    return () => window.removeEventListener("resize", updateVisible);
-  }, []);
-
-  const cardWidth = containerRef.current
-    ? containerRef.current.offsetWidth / visibleCards - 20
-    : 380;
-
-  const maxX = -(
-    projects.length * (cardWidth + 20) -
-    visibleCards * (cardWidth + 20)
-  );
-
-  const prev = () => {
-    const newX = Math.min(x + (cardWidth + 20) * visibleCards, 0);
-    setX(newX);
-    setCurrentSlide(Math.max(0, currentSlide - visibleCards));
-  };
-
-  const next = () => {
-    const newX = Math.max(x - (cardWidth + 20) * visibleCards, maxX);
-    setX(newX);
-    setCurrentSlide(
-      Math.min(projects.length - visibleCards, currentSlide + visibleCards),
-    );
-  };
-
-  const goToSlide = (index) => {
-    const newX = -(index * (cardWidth + 20));
-    setX(newX);
-    setCurrentSlide(index);
-  };
-
-  return (
-    <div className="relative px-8 sm:px-12">
-      {/* Navigation Arrows */}
-      <motion.button
-        onClick={prev}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-r from-teal-500/20 to-cyan-500/20 backdrop-blur-lg border border-teal-500/30 text-teal-400 hover:text-cyan-400 hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(0,255,255,0.3)] transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-        disabled={currentSlide === 0}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <FaArrowLeft className="text-xl" />
-      </motion.button>
-
-      {/* Cards Container */}
-      <div ref={containerRef} className="overflow-hidden">
-        <motion.div
-          className="flex gap-5"
-          animate={{ x }}
-          transition={{ type: "spring", damping: 20 }}
-        >
-          {projects.map((project) => (
-            <div style={{ minWidth: cardWidth }} key={project.title}>
-              <ProjectCard project={project} />
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
-      <motion.button
-        onClick={next}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-r from-teal-500/20 to-cyan-500/20 backdrop-blur-lg border border-teal-500/30 text-teal-400 hover:text-cyan-400 hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(0,255,255,0.3)] transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-        disabled={currentSlide >= projects.length - visibleCards}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <FaArrowRight className="text-xl" />
-      </motion.button>
-
-      {/* Pagination Dots */}
-      <div className="flex justify-center gap-2 mt-8">
-        {Array.from({ length: Math.ceil(projects.length / visibleCards) }).map(
-          (_, i) => (
-            <button
-              key={i}
-              onClick={() => goToSlide(i * visibleCards)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                Math.floor(currentSlide / visibleCards) === i
-                  ? "w-8 bg-gradient-to-r from-teal-400 to-cyan-400"
-                  : "bg-white/30 hover:bg-white/50"
-              }`}
-            />
-          ),
-        )}
-      </div>
-
-      {/* Slide Counter */}
-      <div className="text-center mt-4 text-sm text-gray-400">
-        <span className="text-teal-400 font-semibold">{currentSlide + 1}</span>
-        <span className="mx-2">of</span>
-        <span className="text-gray-300">{projects.length}</span>
-      </div>
-    </div>
-  );
-};
-
-// Enhanced Section Component
-const ProjectSection = ({ title, projects }) => (
-  <motion.div
-    className="mb-24"
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-100px" }}
-    transition={{ duration: 0.6 }}
-  >
-    <div className="flex items-center justify-between mb-8">
-      <div>
-        <h3
-          className={`text-4xl sm:text-5xl font-bold mb-3 bg-gradient-to-r from-teal-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent ${spaceGrotesk.className}`}
-        >
-          {title}
-          <span className="block w-32 h-1.5 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-full mt-3 shadow-[0_0_15px_rgba(0,255,255,0.5)]"></span>
-        </h3>
-        <p className="text-gray-400 text-sm">
-          {projects.length} project{projects.length > 1 ? "s" : ""} showcasing{" "}
-          {title.toLowerCase()} level skills
-        </p>
-      </div>
-      <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
-        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-        <span className="text-sm text-gray-300">Active</span>
-      </div>
-    </div>
-    <Carousel projects={projects} />
-  </motion.div>
-);
-
-// Main Projects Component
 export default function Projects({ id }) {
-  const [activeLevel, setActiveLevel] = useState("All");
+  const [activeTab, setActiveTab] = useState("All");
+  const [selectedProject, setSelectedProject] = useState(null);
 
-  const allProjects = Object.values(projectsData).flat();
+  const filteredProjects =
+    activeTab === "All"
+      ? projectsData
+      : projectsData.filter((p) => p.category === activeTab);
 
   return (
     <section
       id={id}
-      className={`bg-gradient-to-b from-[#0a0a0a] to-[#111] text-white py-28 px-4 sm:px-6 ${spaceGrotesk.className}`}
+      className="relative py-24 md:py-36 border-b border-[#DDD9CE] dark:border-[#1E2023] bg-[#F8F7F4] dark:bg-[#0C0D0E]"
     >
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header with Filter */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-5xl sm:text-6xl font-bold mb-6 relative">
-            <span className="bg-gradient-to-r from-teal-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent animate-gradient-x">
-              Featured Projects
-            </span>
-            <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-40 h-1.5 bg-gradient-to-r from-teal-400 via-cyan-400 to-teal-400 rounded-full shadow-[0_0_20px_rgba(0,255,255,0.5)]"></span>
-          </h2>
-
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-10">
-            A curated collection of my work, from beginner experiments to
-            complex full-stack applications
-          </p>
-
-          {/* Level Filter */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {["All", ...Object.keys(projectsData)].map((level) => (
-              <button
-                key={level}
-                onClick={() => setActiveLevel(level)}
-                className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
-                  activeLevel === level
-                    ? "bg-gradient-to-r from-teal-500 to-cyan-500 text-black shadow-[0_0_25px_rgba(0,255,255,0.4)]"
-                    : "bg-white/5 backdrop-blur-sm border border-white/10 text-gray-300 hover:border-white/30 hover:text-white"
-                }`}
-              >
-                {level}
-                {level !== "All" && (
-                  <span className="ml-2 text-xs opacity-70">
-                    ({projectsData[level]?.length || 0})
-                  </span>
-                )}
-              </button>
-            ))}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#DDD9CE] dark:border-[#1E2023]">
+          <div className="space-y-3">
+            <p className="font-mono text-xs uppercase tracking-[0.25em] text-[#8E8D86] dark:text-[#6C6A64]">
+              // 01 — SELECTED WORKS & ARCHITECTURE
+            </p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-[#121314] dark:text-[#F4F3EF]">
+              Engineered solutions with tangible impact.
+            </h2>
           </div>
-        </motion.div>
 
-        {/* Projects Display */}
-        <div className="min-h-[600px]">
-          {activeLevel === "All" ? (
-            Object.entries(projectsData).map(([level, projects]) => (
-              <ProjectSection key={level} title={level} projects={projects} />
-            ))
-          ) : (
-            <ProjectSection
-              title={activeLevel}
-              projects={projectsData[activeLevel]}
-            />
-          )}
+          <p className="text-sm font-mono text-[#8E8D86] dark:text-[#6C6A64] max-w-xs">
+            A curated index of production systems, distributed web apps, and design explorations.
+          </p>
         </div>
 
-        {/* Stats Footer */}
-        <motion.div
-          className="mt-20 pt-8 border-t border-white/10"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-              <div className="text-3xl font-bold text-teal-400 mb-2">
-                {allProjects.length}
+        {/* Filter Pills */}
+        <div className="flex flex-wrap items-center gap-2 pt-8 pb-12">
+          {categories.map((cat) => {
+            const count =
+              cat === "All"
+                ? projectsData.length
+                : projectsData.filter((p) => p.category === cat).length;
+            const isActive = activeTab === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveTab(cat)}
+                className={`px-4 py-2 rounded-full text-xs font-mono transition-all duration-200 cursor-pointer flex items-center gap-2 ${
+                  isActive
+                    ? "bg-[#121314] text-[#F4F3EF] dark:bg-[#F4F3EF] dark:text-[#0C0D0E] font-medium"
+                    : "border border-[#DDD9CE] dark:border-[#202225] bg-[#FFFFFF]/60 dark:bg-[#131416]/60 text-[#575855] dark:text-[#A09E96] hover:border-[#121314] dark:hover:border-[#F4F3EF]"
+                }`}
+              >
+                <span>{cat}</span>
+                <span className="text-[10px] opacity-60">[{count < 10 ? `0${count}` : count}]</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Editorial Project Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredProjects.map((project, index) => (
+            <motion.article
+              key={project.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              className="group flex flex-col justify-between rounded-2xl border border-[#DDD9CE] dark:border-[#202225] bg-[#FFFFFF] dark:bg-[#131416] p-4 transition-all duration-300 hover:border-[#121314] dark:hover:border-[#404348] hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)]"
+            >
+              {/* Media Frame */}
+              <div>
+                <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-[#EDEAE3] dark:bg-[#191B1D] mb-4">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-[#0C0D0E]/10 dark:bg-[#0C0D0E]/20 group-hover:opacity-0 transition-opacity" />
+
+                  {/* Top Architectural Badges */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                    <span className="font-mono text-[10px] px-2 py-0.5 rounded-md bg-[#0C0D0E]/70 backdrop-blur-md text-[#F4F3EF] border border-white/10">
+                      {project.id}
+                    </span>
+                    <span className="font-mono text-[10px] px-2 py-0.5 rounded-md bg-[#0C0D0E]/70 backdrop-blur-md text-[#A09E96] border border-white/10">
+                      {project.year}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content Details */}
+                <div className="space-y-2">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <h3 className="text-xl font-medium tracking-tight text-[#121314] dark:text-[#F4F3EF]">
+                      {project.title}
+                    </h3>
+                    <span className="font-mono text-[10px] text-[#8E8D86] dark:text-[#6C6A64] uppercase">
+                      {project.category}
+                    </span>
+                  </div>
+
+                  <p className="text-xs font-mono text-[#2C3E35] dark:text-[#68B087]">
+                    {project.tagline}
+                  </p>
+
+                  <p className="text-xs text-[#575855] dark:text-[#A09E96] leading-relaxed line-clamp-3 pt-1">
+                    {project.description}
+                  </p>
+                </div>
               </div>
-              <div className="text-gray-400 text-sm">Total Projects</div>
-            </div>
-            <div className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-              <div className="text-3xl font-bold text-cyan-400 mb-2">
-                {Object.keys(projectsData).length}
+
+              {/* Bottom Metadata & Actions */}
+              <div className="pt-5 mt-4 border-t border-[#E8E5DC] dark:border-[#1E2023] space-y-3">
+                {/* Tech Pills */}
+                <div className="flex flex-wrap gap-1.5">
+                  {project.stacks.slice(0, 4).map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2 py-0.5 rounded text-[10px] font-mono border border-[#E8E5DC] dark:border-[#202225] bg-[#F8F7F4] dark:bg-[#191B1D] text-[#575855] dark:text-[#A09E96]"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                  {project.stacks.length > 4 && (
+                    <span className="px-1.5 py-0.5 text-[10px] font-mono text-[#8E8D86] dark:text-[#6C6A64]">
+                      +{project.stacks.length - 4}
+                    </span>
+                  )}
+                </div>
+
+                {/* Interactive Action Links */}
+                <div className="flex items-center justify-between pt-1">
+                  <button
+                    onClick={() => setSelectedProject(project)}
+                    className="text-xs font-mono underline underline-offset-4 text-[#575855] dark:text-[#A09E96] hover:text-[#121314] dark:hover:text-[#F4F3EF] cursor-pointer"
+                  >
+                    Inspect Specs ↗
+                  </button>
+
+                  <div className="flex items-center gap-2">
+                    {project.github && project.github !== "#" && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label="GitHub Repository"
+                        className="p-1.5 rounded-lg border border-[#DDD9CE] dark:border-[#202225] text-[#575855] dark:text-[#A09E96] hover:text-[#121314] dark:hover:text-[#F4F3EF] hover:border-[#121314] dark:hover:border-[#F4F3EF] transition-colors"
+                      >
+                        <Github size={13} />
+                      </a>
+                    )}
+                    {project.live && project.live !== "#" && (
+                      <a
+                        href={project.live}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label="Live Platform"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#121314] text-[#F4F3EF] dark:bg-[#F4F3EF] dark:text-[#0C0D0E] hover:bg-[#2C3E35] dark:hover:bg-[#E8E6DF] transition-colors"
+                      >
+                        <span>Live</span>
+                        <ArrowUpRight size={12} />
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div className="text-gray-400 text-sm">Skill Levels</div>
-            </div>
-            <div className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-              <div className="text-3xl font-bold text-amber-400 mb-2">12+</div>
-              <div className="text-gray-400 text-sm">Technologies</div>
-            </div>
-            <div className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-              <div className="text-3xl font-bold text-purple-400 mb-2">
-                100%
-              </div>
-              <div className="text-gray-400 text-sm">Responsive</div>
-            </div>
-          </div>
-        </motion.div>
+            </motion.article>
+          ))}
+        </div>
       </div>
+
+      {/* ARCHITECTURAL PROJECT DETAILS MODAL / DRAWER */}
+      <AnimatePresence>
+        {selectedProject && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedProject(null)}
+              className="absolute inset-0 bg-[#0C0D0E]/80 backdrop-blur-sm"
+            />
+
+            {/* Modal Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[#DDD9CE] dark:border-[#2A2C30] bg-[#FFFFFF] dark:bg-[#131416] p-6 sm:p-8 md:p-10 shadow-2xl z-10 space-y-6"
+            >
+              {/* Header */}
+              <div className="flex items-start justify-between gap-4 border-b border-[#DDD9CE] dark:border-[#202225] pb-5">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-[#EDEAE3] dark:bg-[#191B1D] text-[#575855] dark:text-[#A09E96]">
+                      CASE // {selectedProject.id}
+                    </span>
+                    <span className="font-mono text-xs text-[#8E8D86] dark:text-[#6C6A64]">
+                      {selectedProject.year}
+                    </span>
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-[#121314] dark:text-[#F4F3EF]">
+                    {selectedProject.title}
+                  </h3>
+                  <p className="text-sm font-mono text-[#2C3E35] dark:text-[#68B087] mt-1">
+                    {selectedProject.tagline}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="p-2 rounded-full border border-[#DDD9CE] dark:border-[#202225] text-[#575855] dark:text-[#A09E96] hover:text-[#121314] dark:hover:text-[#F4F3EF] cursor-pointer"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Media Preview */}
+              <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#EDEAE3] dark:bg-[#191B1D]">
+                <Image
+                  src={selectedProject.image}
+                  alt={selectedProject.title}
+                  fill
+                  className="object-cover object-top"
+                />
+              </div>
+
+              {/* Architecture Deep Dive */}
+              <div className="grid md:grid-cols-2 gap-6 pt-2">
+                <div className="space-y-2">
+                  <p className="font-mono text-[11px] uppercase tracking-wider text-[#8E8D86] dark:text-[#6C6A64]">
+                    THE ARCHITECTURAL CHALLENGE
+                  </p>
+                  <p className="text-sm text-[#575855] dark:text-[#A09E96] leading-relaxed">
+                    {selectedProject.challenge}
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <p className="font-mono text-[11px] uppercase tracking-wider text-[#8E8D86] dark:text-[#6C6A64]">
+                    THE ENGINEERING SOLUTION
+                  </p>
+                  <p className="text-sm text-[#575855] dark:text-[#A09E96] leading-relaxed">
+                    {selectedProject.solution}
+                  </p>
+                </div>
+              </div>
+
+              {/* Key Features */}
+              <div className="space-y-3 pt-2">
+                <p className="font-mono text-[11px] uppercase tracking-wider text-[#8E8D86] dark:text-[#6C6A64]">
+                  CORE ARCHITECTURAL HIGHLIGHTS
+                </p>
+                <div className="grid sm:grid-cols-3 gap-3">
+                  {selectedProject.highlights.map((feat, i) => (
+                    <div
+                      key={i}
+                      className="p-3 rounded-xl border border-[#DDD9CE] dark:border-[#202225] bg-[#F8F7F4] dark:bg-[#191B1D] flex items-start gap-2.5"
+                    >
+                      <CheckCircle2
+                        size={15}
+                        className="text-[#2C3E35] dark:text-[#68B087] shrink-0 mt-0.5"
+                      />
+                      <span className="text-xs text-[#121314] dark:text-[#F4F3EF] font-medium leading-snug">
+                        {feat}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Stack & Action Links */}
+              <div className="pt-4 border-t border-[#DDD9CE] dark:border-[#202225] flex flex-wrap items-center justify-between gap-4">
+                <div className="flex flex-wrap gap-1.5">
+                  {selectedProject.stacks.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2.5 py-1 rounded-md text-xs font-mono border border-[#DDD9CE] dark:border-[#202225] bg-[#FFFFFF] dark:bg-[#131416] text-[#575855] dark:text-[#A09E96]"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-3">
+                  {selectedProject.github && selectedProject.github !== "#" && (
+                    <a
+                      href={selectedProject.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-mono border border-[#DDD9CE] dark:border-[#202225] hover:border-[#121314] dark:hover:border-[#F4F3EF] text-[#121314] dark:text-[#F4F3EF]"
+                    >
+                      <Github size={14} />
+                      <span>Repository</span>
+                    </a>
+                  )}
+                  {selectedProject.live && selectedProject.live !== "#" && (
+                    <a
+                      href={selectedProject.live}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-medium bg-[#121314] text-[#F4F3EF] dark:bg-[#F4F3EF] dark:text-[#0C0D0E] hover:bg-[#2C3E35] dark:hover:bg-[#E8E6DF]"
+                    >
+                      <span>Visit Live Platform</span>
+                      <ArrowUpRight size={14} />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
